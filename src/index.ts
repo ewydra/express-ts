@@ -33,23 +33,28 @@
  * - Passport LocalStrategy: https://www.passportjs.org/packages/passport-local/
  * - Passport JWTStrategy: https://www.passportjs.org/packages/passport-jwt/
  */
+import "reflect-metadata";
 import express from "express";
+import datasource from "./datasource";
 
-const port = process.env.PORT ?? 8080;
-const app = express();
+(async () => {
+  await datasource.initialize();
+  const port = process.env.PORT ?? 8080;
+  const app = express();
 
-app.get("/", (req, res) => {
-  res.json({
-    hello: "world",
+  app.get("/", (req, res) => {
+    res.json({
+      hello: "world",
+    });
   });
-});
 
-const server = app.listen(+port, () => {
-  console.log("server started");
-});
-
-process.on("SIGTERM", () => {
-  server.close(() => {
-    console.log("Killing server");
+  const server = app.listen(+port, () => {
+    console.log("server started");
   });
-});
+
+  process.on("SIGTERM", () => {
+    server.close(() => {
+      console.log("Killing server");
+    });
+  });
+})();
