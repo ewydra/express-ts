@@ -32,6 +32,7 @@
  * - Piping readable stream to writable stream: https://nodejs.org/dist/latest-v18.x/docs/api/stream.html#readablepipedestination-options
  * - Passport LocalStrategy: https://www.passportjs.org/packages/passport-local/
  * - Passport JWTStrategy: https://www.passportjs.org/packages/passport-jwt/
+ * - Hashing passwowrd - bcrypt: https://www.npmjs.com/package/bcrypt
  */
 import "reflect-metadata";
 import express from "express";
