@@ -23,34 +23,39 @@
  *
  * === Helpful links:
  *
- * -
  * - Adding middleware in express: https://expressjs.com/en/4x/api.html#app.use
  * - Creating param parser in express: https://expressjs.com/en/4x/api.html#app.param
  * - Creating sub-router in express: https://expressjs.com/en/4x/api.html#router (scroll to the bottom for nice example)
  * - Package for storing files with express: https://www.npmjs.com/package/multer
  * - Creating gzip stream: https://nodejs.org/dist/latest-v18.x/docs/api/zlib.html#zlib
  * - Piping readable stream to writable stream: https://nodejs.org/dist/latest-v18.x/docs/api/stream.html#readablepipedestination-options
+ * - Piping streams: https://nodejs.org/dist/latest-v18.x/docs/api/stream.html#streampipelinesource-transforms-destination-callback
  * - Passport LocalStrategy: https://www.passportjs.org/packages/passport-local/
  * - Passport JWTStrategy: https://www.passportjs.org/packages/passport-jwt/
  * - Hashing passwowrd - bcrypt: https://www.npmjs.com/package/bcrypt
+ * - Buffer to stream: https://nodejs.org/dist/latest-v18.x/docs/api/stream.html#streamreadablefromiterable-options
  */
 import "reflect-metadata";
 import express from "express";
 import datasource from "./datasource";
+import { User } from "./user.entity";
 
 (async () => {
   await datasource.initialize();
   const port = process.env.PORT ?? 8080;
   const app = express();
 
-  app.get("/", (req, res) => {
+  app.get("/", async (req, res) => {
+    const userRepository = datasource.getRepository(User);
+
     res.json({
       hello: "world",
+      count: await userRepository.count(),
     });
   });
 
   const server = app.listen(+port, () => {
-    console.log("server started");
+    console.log(`Server started on port ${port}`);
   });
 
   process.on("SIGTERM", () => {
