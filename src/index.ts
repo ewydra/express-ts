@@ -21,6 +21,13 @@
  * 10. Create login route that uses JWT token
  * 11. Apply JWTStrategy authentication to both POST file and GET file routes
  *
+ *
+ * === PART 3
+ *
+ * 12. Create a table for storing files - it should contain id and path to a file on disk
+ * 13. Modify file upload and download routes. Access file using an id instead of name.
+ * 14. Assign file to a user. Only allow file owners to download a file.
+ *
  * === Helpful links:
  *
  * - Adding middleware in express: https://expressjs.com/en/4x/api.html#app.use
