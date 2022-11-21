@@ -45,21 +45,25 @@
 import "reflect-metadata";
 import express from "express";
 import datasource from "./datasource";
-import { User } from "./user.entity";
+import { router as filesRouter } from "./files";
+import { router as authRouter } from "./auth";
+import session from "express-session";
+import "./localStrategy";
+import "./jwtStrategy";
+import passport from "passport";
 
 (async () => {
   await datasource.initialize();
   const port = process.env.PORT ?? 8080;
   const app = express();
-
-  app.get("/", async (req, res) => {
-    const userRepository = datasource.getRepository(User);
-
-    res.json({
-      hello: "world",
-      count: await userRepository.count(),
-    });
-  });
+  app.use(express.json());
+  app.use(
+    session({ secret: "secret", resave: false, saveUninitialized: false })
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use("/files", filesRouter);
+  app.use("/auth", authRouter);
 
   const server = app.listen(+port, () => {
     console.log(`Server started on port ${port}`);
